@@ -1,0 +1,58 @@
+# service levels per class, holding cost %, order cost, horizon
+# Global project settings. Change numbers here, never inside the code.
+
+random_seed: 42
+
+# Time handling
+time_bucket: weekly          # demand is aggregated to SKU-week
+periods_per_year: 52
+history_weeks: 52            # used to estimate mean/std and design policies
+# the remaining weeks are the test window used by the simulation
+
+# Data cleaning
+min_active_weeks: 20         # drop SKUs with less history than this
+outlier_percentile: 99.9     # flag (not delete) quantities above this
+cancellations: drop          # drop | net
+
+# Non-product stock codes to remove
+non_product_codes: [POST, D, M, DOT, BANK CHARGES, AMAZONFEE, S, CRUK, C2, B]
+
+# Lighting sub-catalogue filter (matched against Description)
+lighting_keywords: [LIGHT, LAMP, LANTERN, T-LIGHT, FAIRY, CANDLE HOLDER, BULB]
+
+# Synthetic cost rules
+unit_cost_ratio_range: [0.55, 0.75]   # cost = price * U(low, high)
+holding_cost_pct: 0.22                # per year, as a fraction of unit cost
+
+# Classification thresholds
+abc:
+  a_cutoff: 0.80             # top 80% of revenue = A
+  b_cutoff: 0.95             # next 15% = B, rest = C
+xyz:
+  x_max_cv: 0.5              # CV <= 0.5 = X (stable)
+  y_max_cv: 1.0              # 0.5 < CV <= 1.0 = Y, above = Z (erratic)
+
+# Target service level by ABC class
+service_level:
+  A: 0.98
+  B: 0.95
+  C: 0.90
+
+# Policy per ABC-XYZ cell (used by policy_assign.py)
+# review = how often we check stock; policy = rule used
+policy_matrix:
+  AX: {policy: "continuous (s,Q)", service_adj: 0.00}
+  AY: {policy: "continuous (s,Q)", service_adj: 0.00}
+  AZ: {policy: "periodic (R,S)",   service_adj: -0.01}
+  BX: {policy: "continuous (s,Q)", service_adj: 0.00}
+  BY: {policy: "periodic (R,S)",   service_adj: 0.00}
+  BZ: {policy: "periodic (R,S)",   service_adj: -0.02}
+  CX: {policy: "min-max",          service_adj: 0.00}
+  CY: {policy: "min-max",          service_adj: -0.02}
+  CZ: {policy: "make-to-order / min stock", service_adj: -0.05}
+
+# Simulation
+simulation:
+  n_runs: 200                # Monte Carlo repetitions
+  initial_inventory: rop     # start each SKU at its reorder point
+  backorders: false          # false = lost sales, true = backorders

@@ -1,0 +1,51 @@
+# supplier regions: lead time mean/std, reliability, MOQ, cost premium
+# Synthetic supply-side assumptions. Demand is real, these are modelled.
+# Lead times are in DAYS here; the code converts them to weeks.
+
+regions:
+  local_eu:
+    lead_time_mean_days: 5
+    lead_time_std_days: 1
+    on_time_pct: 0.95
+    moq_multiplier: 1.0        # x the EOQ-based minimum
+    order_cost: 50
+    unit_cost_premium: 0.05
+    delay_prob: 0.05
+    delay_extra_days: 3
+
+  regional:
+    lead_time_mean_days: 10
+    lead_time_std_days: 3
+    on_time_pct: 0.90
+    moq_multiplier: 1.5
+    order_cost: 80
+    unit_cost_premium: 0.00
+    delay_prob: 0.10
+    delay_extra_days: 5
+
+  asia_sea:
+    lead_time_mean_days: 35
+    lead_time_std_days: 8
+    on_time_pct: 0.80
+    moq_multiplier: 3.0
+    order_cost: 150
+    unit_cost_premium: -0.10   # cheaper per unit
+    delay_prob: 0.20
+    delay_extra_days: 14
+
+  asia_air:
+    lead_time_mean_days: 12
+    lead_time_std_days: 2
+    on_time_pct: 0.92
+    moq_multiplier: 2.0
+    order_cost: 120
+    unit_cost_premium: 0.15    # expensive per unit
+    delay_prob: 0.08
+    delay_extra_days: 4
+
+# How SKUs get assigned to a region, by price tier
+# (cheap high-volume -> sea, high value -> local/air)
+assignment_by_price_tier:
+  low:    {asia_sea: 0.60, regional: 0.25, local_eu: 0.10, asia_air: 0.05}
+  medium: {asia_sea: 0.30, regional: 0.35, local_eu: 0.25, asia_air: 0.10}
+  high:   {asia_sea: 0.10, regional: 0.20, local_eu: 0.40, asia_air: 0.30}

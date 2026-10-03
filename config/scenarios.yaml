@@ -1,0 +1,21 @@
+demand_spike:
+  description: "Large B2B order wave"
+  start_week: 10
+  duration_weeks: 10
+  multiplier: [1.5, 2.0, 3.0]
+
+supplier_delay:
+  description: "One supplier region delivers late"
+  region: asia_sea
+  extra_days: [14, 28, 56]
+  start_week: 8
+  duration_weeks: 20
+
+lead_time_variability:
+  description: "Lead time std grows, mean unchanged"
+  std_multiplier: [1.5, 2.0, 3.0]
+
+combined:
+  description: "Spike plus supplier delay together"
+  spike_multiplier: 2.0
+  delay_extra_days: 28

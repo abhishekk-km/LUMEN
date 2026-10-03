@@ -1,0 +1,8 @@
+muda,measured_by,push_cost,pull_cost
+Inventory,"Days of inventory, carrying cost",158024.0,193791.0
+Overproduction,"Stock beyond 26 weeks of cover, write-down risk",12712.0,16624.0
+Waiting,"Stockout rate, lost margin",258401.0,158540.0
+Transportation,"Orders per year, ordering cost",547094.0,283068.0
+Motion,Not simulated,,
+Over-processing,Not simulated,,
+Defects,Covered under Overproduction proxy,,
